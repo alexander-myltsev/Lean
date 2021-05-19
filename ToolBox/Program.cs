@@ -28,6 +28,7 @@ using QuantConnect.ToolBox.CoinApiDataConverter;
 using QuantConnect.ToolBox.CryptoiqDownloader;
 using QuantConnect.ToolBox.DukascopyDownloader;
 using QuantConnect.ToolBox.EstimizeDataDownloader;
+using QuantConnect.ToolBox.ExanteDownloader;
 using QuantConnect.ToolBox.FxcmDownloader;
 using QuantConnect.ToolBox.FxcmVolumeDownload;
 using QuantConnect.ToolBox.GDAXDownloader;
@@ -195,6 +196,12 @@ namespace QuantConnect.ToolBox
                             fromDate, 
                             toDate);
                         break;
+                    
+                    case "exntdl":
+                    case "exantedownloader":
+                        ExanteDownloaderProgram.ExanteDownloader(tickers, resolution, fromDate, toDate);
+                        break;
+                            
 
                     default:
                         PrintMessageAndExit(1, "ERROR: Unrecognized --app value");
