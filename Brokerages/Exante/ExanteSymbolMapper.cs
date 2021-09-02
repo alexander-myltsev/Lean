@@ -77,6 +77,10 @@ namespace QuantConnect.Brokerages.Exante
                     symbolId = ticker;
                     break;
 
+                case SecurityType.Forex:
+                    symbolId = ticker[..3] + "/" + ticker[3..];
+                    break;
+
                 default:
                     symbolId = ticker;
                     break;

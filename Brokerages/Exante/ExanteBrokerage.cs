@@ -117,10 +117,16 @@ namespace QuantConnect.Brokerages.Exante
                     ? OrderFee.Zero
                     : new OrderFee(new CashAmount(commission.Amount, commission.Asset));
 
-                OnOrderEvent(new OrderEvent(order, DateTime.UtcNow, fee)
+                var orderEvent = new OrderEvent(order, DateTime.UtcNow, fee)
                 {
                     Status = ConvertOrderStatus(exanteOrder.OrderState.Status),
-                });
+                };
+                if (exanteOrder.OrderState.Status == ExanteOrderStatus.Filled)
+                {
+                    orderEvent.FillQuantity = exanteOrder.OrderParameters.Quantity;
+                }
+
+                OnOrderEvent(orderEvent);
             }
         }
 
@@ -150,7 +156,7 @@ namespace QuantConnect.Brokerages.Exante
 
             foreach (var market in new[]
             {
-                "NASDAQ", "ARCA", "AMEX",
+                "NASDAQ", "ARCA", "AMEX", "EXANTE",
                 "USD", "USCORP", "EUR", "GBP", "ASN", "CAD", "AUD", "ARG", "CAD",
                 Market.CBOE, Market.CME, "OTCMKTS", Market.NYMEX, Market.CBOT, Market.COMEX, Market.ICE,
             })
