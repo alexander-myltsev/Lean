@@ -23,7 +23,7 @@ namespace QuantConnect.Brokerages
         /// <returns>The benchmark for this brokerage</returns>
         public override IBenchmark GetBenchmark(SecurityManager securities)
         {
-            var symbol = Symbol.Create("SPY", SecurityType.Equity, Market.Bitfinex);
+            var symbol = Symbol.Create("SPY", SecurityType.Equity, Market.USA);
             return SecurityBenchmark.CreateInstance(securities, symbol);
         }
 
