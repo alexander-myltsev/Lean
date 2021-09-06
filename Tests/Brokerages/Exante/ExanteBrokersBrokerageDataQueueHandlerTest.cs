@@ -33,18 +33,16 @@ namespace QuantConnect.Tests.Brokerages.Exante
         {
             var brokerage = (ExanteBrokerage) Brokerage;
             brokerage.Connect();
-            var gotUsdData = false;
+            var gotSpyData = false;
 
             var cancelationToken = new CancellationTokenSource();
 
-            var market = "ARCA";
-            Market.Add(market, 998);
-            var symbol = Symbol.Create("SPY", SecurityType.Equity, market);
+            var symbol = Symbol.Create("SPY", SecurityType.Equity, Market.USA);
 
             ProcessFeed(
                 brokerage.Subscribe(GetSubscriptionDataConfig<TradeBar>(symbol, Resolution.Second), (s, e) =>
                 {
-                    gotUsdData = true;
+                    gotSpyData = true;
                 }),
                 cancelationToken,
                 (tick) => Log(tick));
@@ -53,7 +51,7 @@ namespace QuantConnect.Tests.Brokerages.Exante
             cancelationToken.Cancel();
             cancelationToken.Dispose();
 
-            Assert.IsTrue(gotUsdData);
+            Assert.IsTrue(gotSpyData);
         }
 
         private new static void ProcessFeed(
