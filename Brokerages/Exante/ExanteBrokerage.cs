@@ -25,6 +25,7 @@ using Exante.Net;
 using Exante.Net.Enums;
 using Exante.Net.Objects;
 using Newtonsoft.Json.Linq;
+using NodaTime;
 using QuantConnect.Data;
 using QuantConnect.Orders.Fees;
 using QuantConnect.Orders.TimeInForces;
@@ -44,6 +45,7 @@ namespace QuantConnect.Brokerages.Exante
         private readonly IDataAggregator _aggregator;
         private readonly ExanteSymbolMapper _symbolMapper;
         private readonly ConcurrentDictionary<Guid, Order> _orderMap = new();
+        private readonly Dictionary<Symbol, DateTimeZone> _symbolExchangeTimeZones = new();
         private readonly EventBasedDataQueueHandlerSubscriptionManager _subscriptionManager;
         private readonly BrokerageConcurrentMessageHandler<ExanteOrder> _messageHandler;
 

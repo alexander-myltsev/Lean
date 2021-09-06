@@ -25,6 +25,7 @@ using QuantConnect.Packets;
 using NodaTime;
 using QuantConnect.Data.Market;
 using QuantConnect.Logging;
+using QuantConnect.Securities;
 using QuantConnect.Util;
 
 namespace QuantConnect.Brokerages.Exante
@@ -182,15 +183,31 @@ namespace QuantConnect.Brokerages.Exante
                 return null;
             }
 
-            var utc = exanteFeedTrade.Date;
             // Convert the timestamp to exchange timezone and pass into algorithm
-            var time = utc.ConvertTo(DateTimeZone.Utc, TimeZones.NewYork);
+            var time = GetRealTimeTickTime(exanteFeedTrade.Date, symbol);
 
             var instrument = _client.GetSymbol(symbolId);
 
             var size = exanteFeedTrade.Size ?? 0m;
             var price = exanteFeedTrade.Price ?? 0m;
             return new Tick(time, symbol, "", instrument.Data.Exchange, size, price);
+        }
+
+        /// <summary>
+        /// Returns a timestamp for a tick converted to the exchange time zone
+        /// </summary>
+        private DateTime GetRealTimeTickTime(DateTime time, Symbol symbol)
+        {
+            DateTimeZone exchangeTimeZone;
+            if (!_symbolExchangeTimeZones.TryGetValue(symbol, out exchangeTimeZone))
+            {
+                // read the exchange time zone from market-hours-database
+                exchangeTimeZone = MarketHoursDatabase.FromDataFolder()
+                    .GetExchangeHours(symbol.ID.Market, symbol, symbol.SecurityType).TimeZone;
+                _symbolExchangeTimeZones.Add(symbol, exchangeTimeZone);
+            }
+
+            return time.ConvertFromUtc(exchangeTimeZone);
         }
 
         /// <summary>
