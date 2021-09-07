@@ -54,7 +54,7 @@ namespace QuantConnect.Orders.Fees
 
                 case SecurityType.Option:
                 case SecurityType.IndexOption:
-                    var optionsFee = ComputeOptionFee("USA", order);
+                    var optionsFee = ComputeOptionFee(Market.USA, order);
                     feeResult = optionsFee.Amount;
                     feeCurrency = optionsFee.Currency;
                     break;
