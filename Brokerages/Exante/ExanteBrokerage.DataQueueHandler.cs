@@ -190,7 +190,7 @@ namespace QuantConnect.Brokerages.Exante
 
             var size = exanteFeedTrade.Size ?? 0m;
             var price = exanteFeedTrade.Price ?? 0m;
-            return new Tick(time, symbol, "", instrument.Data.Exchange, size, price);
+            return new Tick(time, symbol, "", instrument.Exchange, size, price);
         }
 
         /// <summary>

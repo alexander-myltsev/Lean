@@ -59,7 +59,7 @@ namespace QuantConnect.Brokerages.Exante
         /// <returns>LEAN holding</returns>
         private Holding ConvertHolding(ExantePosition position)
         {
-            var exanteSymbol = _client.GetSymbol(position.SymbolId).Data;
+            var exanteSymbol = _client.GetSymbol(position.SymbolId);
             var symbol = ConvertSymbol(exanteSymbol);
             var holding = new Holding
             {

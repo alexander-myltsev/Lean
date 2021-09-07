@@ -229,7 +229,7 @@ namespace QuantConnect.Brokerages.Exante
                         continue;
                 }
 
-                var symbol = _client.GetSymbol(item.OrderParameters.SymbolId).Data;
+                var symbol = _client.GetSymbol(item.OrderParameters.SymbolId);
 
                 switch (item.OrderParameters.Side)
                 {

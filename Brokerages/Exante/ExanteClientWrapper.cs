@@ -14,6 +14,7 @@
 */
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
@@ -29,6 +30,7 @@ namespace QuantConnect.Brokerages.Exante
     /// </summary>
     public class ExanteClientWrapper : IDisposable
     {
+        private readonly ConcurrentDictionary<string, ExanteSymbol> _symbolIdToSymbolCache = new();
         private readonly ExanteClient _client;
 
         /// <summary>Get Exante client for stream data</summary>
@@ -163,15 +165,23 @@ namespace QuantConnect.Brokerages.Exante
 
         /// <summary>Get instrument</summary>
         /// <returns>Instrument available for authorized user</returns>
-        public WebCallResult<ExanteSymbol> GetSymbol(
+        public ExanteSymbol GetSymbol(
             string symbolId,
             CancellationToken ct = default(CancellationToken)
             )
         {
+            if (_symbolIdToSymbolCache.TryGetValue(symbolId, out var symbol))
+            {
+                return symbol;
+            }
+
             var response =
                 _client.GetSymbolAsync(symbolId, ct).SynchronouslyAwaitTaskResult();
             CheckIfResponseOk(response);
-            return response;
+            symbol = response.Data;
+            _symbolIdToSymbolCache.TryAdd(symbolId, symbol);
+
+            return symbol;
         }
 
         /// <summary>Get order</summary>
