@@ -223,9 +223,10 @@ namespace QuantConnect.Brokerages.Exante
                 return null;
             }
 
+            var time = GetRealTimeTickTime(exanteTickShort.Date, symbol);
             var bids = exanteTickShort.Bid.ToList();
             var asks = exanteTickShort.Ask.ToList();
-            return new Tick(exanteTickShort.Date, symbol, "", "",
+            return new Tick(time, symbol, "", "",
                 bids.IsNullOrEmpty() ? decimal.Zero : bids[0].Size,
                 bids.IsNullOrEmpty() ? decimal.Zero : bids[0].Price,
                 asks.IsNullOrEmpty() ? decimal.Zero : asks[0].Size,
