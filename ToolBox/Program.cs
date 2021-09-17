@@ -141,7 +141,7 @@ namespace QuantConnect.ToolBox
                             fromDate, 
                             toDate);
                         break;
-                    
+
                     case "avdl":
                     case "alphavantagedownloader":
                         AlphaVantageDownloaderProgram.AlphaVantageDownloader(
