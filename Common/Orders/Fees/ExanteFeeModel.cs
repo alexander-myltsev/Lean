@@ -82,6 +82,11 @@ namespace QuantConnect.Orders.Fees
                     feeResult = 1.5m;
                     feeCurrency = Currencies.USD;
                     break;
+                
+                case SecurityType.Crypto:
+                    feeResult = 0.0m;
+                    feeCurrency = Currencies.USD;
+                    break;
 
                 default:
                     throw new ArgumentException(Invariant($"Unsupported security type: {security.Type}"));
